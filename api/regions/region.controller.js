@@ -1,8 +1,7 @@
-const { Region } = require("../../models/Region");
-
+const Region = require("../../models/Region");
 const getRegions = async (req, res, next) => {
   try {
-    const regions = await Region.findAll();
+    const regions = await Region.find();
     res.status(200).json(regions);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -10,7 +9,7 @@ const getRegions = async (req, res, next) => {
 };
 const getRegionById = async (req, res, next) => {
   try {
-    const region = await Region.findByPk(req.params.regionId);
+    const region = await Region.findById(req.params.regionId);
     res.status(200).json(region);
   } catch (error) {
     res.status(500).json({ error: error.message });

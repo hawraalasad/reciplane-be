@@ -10,6 +10,10 @@ const UserRouter = require("./api/users/user.router"); // Add this line to impor
 const passport = require("passport");
 const { jwtStrategy, localStrategy } = require("./config/passport");
 
+const RecipeRouter = require("./api/recipes/recipe.router");
+const IngredientRouter = require("./api/ingredients/ingredient.router");
+const CountryRouter = require("./api/countries/country.router");
+const RegionRouter = require("./api/regions/region.router");
 dotenv.config();
 const PORT = process.env.PORT;
 
@@ -23,7 +27,10 @@ passport.use("jwt", jwtStrategy, localStrategy); // Initialize Passport with the
 
 // Add here to use routers
 app.use("/api/", UserRouter);
-
+app.use("/api/", RegionRouter);
+app.use("/api/", RecipeRouter);
+app.use("/api/", IngredientRouter);
+app.use("/api/", CountryRouter);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
