@@ -8,7 +8,7 @@ const notFoundHandler = require("./middlewares/notFoundHandler");
 const errorHandler = require("./middlewares/errorHandler");
 const UserRouter = require("./api/users/user.router"); // Add this line to import UserRouter
 const passport = require("passport");
-const { jwtStrategy, localStrategy } = require("./config/passport");
+const { jwtStrategy, localStrategy } = require("./middlewares/passport");
 
 const RecipeRouter = require("./api/recipes/recipe.router");
 const IngredientRouter = require("./api/ingredients/ingredient.router");
@@ -23,7 +23,8 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors());
 app.use(passport.initialize());
-passport.use("jwt", jwtStrategy, localStrategy); // Initialize Passport with the JWT strategy
+passport.use("jwt", jwtStrategy); // Initialize Passport with the JWT strategy
+passport.use("local", localStrategy); // Initialize Passport with the local strategy
 
 // Add here to use routers
 app.use("/api/", UserRouter);
