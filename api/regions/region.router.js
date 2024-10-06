@@ -13,4 +13,4 @@ regionRouter.post("/regions", createRegion);
 regionRouter.put("/regions/:regionId", updateRegion);
 regionRouter.delete("/regions/:regionId", deleteRegion);
 
-module.exports = router;
+module.exports = regionRouter;

@@ -9,7 +9,6 @@ const recipeSchema = new Schema(
     },
     image: {
       type: String,
-      required: true,
     },
     description: {
       type: String,
@@ -19,12 +18,10 @@ const recipeSchema = new Schema(
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: true,
     },
     country: {
       type: Schema.Types.ObjectId,
       ref: "Country",
-      required: true,
     },
     ingredients: [
       {
