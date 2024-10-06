@@ -56,7 +56,7 @@ const signup = async (req, res, next) => {
 
     // If an image was uploaded, add its path to userData
     if (req.file) {
-      userData.imagePath = req.file.path;
+      userData.image = req.file.path;
     }
 
     const user = await User.create(userData);
@@ -68,6 +68,7 @@ const signup = async (req, res, next) => {
   } catch (error) {
     console.error(error);
     next(error);
+    console.log(error);
   }
 };
 

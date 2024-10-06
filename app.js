@@ -27,11 +27,11 @@ passport.use("jwt", JwtStrategy); // Initialize Passport with the JWT strategy
 passport.use("local", localStrategy); // Initialize Passport with the local strategy
 
 // Add here to use routers
-app.use("/api/", UserRouter);
-app.use("/api/", RegionRouter);
-app.use("/api/", RecipeRouter);
-app.use("/api/", IngredientRouter);
-app.use("/api/", CountryRouter);
+app.use("/api", UserRouter);
+app.use("/api", RegionRouter);
+app.use("/api", RecipeRouter);
+app.use("/api", IngredientRouter);
+app.use("/api", CountryRouter);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
