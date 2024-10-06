@@ -1,4 +1,6 @@
 const express = require("express");
+const upload = require("../../middlewares/multer");
+
 const recipeRouter = express.Router();
 const {
   getRecipes,
@@ -10,8 +12,8 @@ const {
 
 recipeRouter.get("/recipes", getRecipes);
 recipeRouter.get("/recipes/:recipeId", getRecipeById);
-recipeRouter.post("/recipes", createRecipe);
-recipeRouter.put("/recipes/:recipeId", updateRecipe);
+recipeRouter.post("/recipes", upload.single("image"), createRecipe);
+recipeRouter.put("/recipes/:recipeId", upload.single("image"), updateRecipe);
 recipeRouter.delete("/recipes/:recipeId", deleteRecipe);
 
 module.exports = recipeRouter;

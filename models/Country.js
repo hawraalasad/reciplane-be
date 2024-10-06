@@ -11,7 +11,6 @@ const countrySchema = new Schema(
     region: {
       type: Schema.Types.ObjectId,
       ref: "Region",
-      required: true,
     },
     recipes: [
       {

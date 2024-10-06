@@ -7,7 +7,10 @@ const cors = require("cors"); // Add this line to import cors
 const notFoundHandler = require("./middlewares/notFoundHandler");
 const errorHandler = require("./middlewares/errorHandler");
 const UserRouter = require("./api/users/user.router"); // Add this line to import UserRouter
-
+const RecipeRouter = require("./api/recipes/recipe.router");
+const IngredientRouter = require("./api/ingredients/ingredient.router");
+const CountryRouter = require("./api/countries/country.router");
+const RegionRouter = require("./api/regions/region.router");
 dotenv.config();
 const PORT = process.env.PORT;
 
@@ -19,7 +22,10 @@ app.use(cors());
 
 // Add here to use routers
 app.use("/api/", UserRouter);
-
+app.use("/api/", RegionRouter);
+app.use("/api/", RecipeRouter);
+app.use("/api/", IngredientRouter);
+app.use("/api/", CountryRouter);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
