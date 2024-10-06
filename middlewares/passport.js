@@ -13,12 +13,15 @@ const localStrategy = new LocalStrategy(
   },
   async (username, password, done) => {
     try {
-      const foundUser = await User.findOne({ username: username }); //find the user
-      if (!foundUser)
-        return done({ message: "Username or password incorrect" });
-      const isMatch = await bcrypt.compare(password, foundUser.password); //check password
-      if (!isMatch) return done({ message: "Username or password incorrect" });
-      return done(null, foundUser); //req.user //go to controller if all's good
+      const foundUser = await User.findOne({ username: username });
+      if (!foundUser) {
+        return done(null, false, { message: "Username or password incorrect" });
+      }
+      const isMatch = await bcrypt.compare(password, foundUser.password);
+      if (!isMatch) {
+        return done(null, false, { message: "Username or password incorrect" });
+      }
+      return done(null, foundUser);
     } catch (error) {
       return done(error);
     }
@@ -33,13 +36,17 @@ const JwtStrategy = new JWTStrategy(
   async (payload, done) => {
     try {
       const user = await User.findById(payload._id);
-      if (!user) return done({ messsage: "User is not Found" });
+      if (!user) {
+        return done(null, false, { message: "User not found" });
+      }
 
-      const expiry = new Date(payload.exp * 1000); // It converts the expiration timestamp from the JWT (which is in seconds) to millisecond
+      const expiry = new Date(payload.exp * 1000);
       const now = new Date();
-      if (now > expiry) return done({ message: "Token expired" });
+      if (now > expiry) {
+        return done(null, false, { message: "Token expired" });
+      }
 
-      return done(null, user); //req.user
+      return done(null, user);
     } catch (error) {
       return done(error);
     }
