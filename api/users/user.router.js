@@ -1,4 +1,5 @@
 const express = require("express");
+const passport = require("passport");
 const upload = require("../../middlewares/multer");
 const {
   getUsers,
