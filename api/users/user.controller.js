@@ -23,7 +23,7 @@ const generateToken = (user) => {
     _id: user._id,
   };
   const token = jwt.sign(payload, process.env.JWT_SECRET, {
-    expiresIn: "1h",
+    expiresIn: process.env.JWT_EXPIRATION || "1h",
   });
   return token;
 };
@@ -41,6 +41,9 @@ const getUsers = async (req, res, next) => {
 const getUserById = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
     res.json(user);
   } catch (error) {
     next(error);
@@ -50,40 +53,38 @@ const getUserById = async (req, res, next) => {
 const signup = async (req, res, next) => {
   try {
     const userData = req.body;
+    console.log("Received user data:", userData);
 
     // Hash the password
     userData.password = await hashPassword(userData.password);
+    console.log("Password hashed");
 
     // If an image was uploaded, add its path to userData
     if (req.file) {
-      userData.imagePath = req.file.path;
+      userData.image = req.file.path;
+      console.log("Image path added:", userData.image);
     }
 
+    console.log("User data before creation:", userData);
+
     const user = await User.create(userData);
+
+    console.log("Created user:", user);
 
     // Generate a token for the new user
     const token = generateToken(user);
 
-    res.status(201).json({ user: user.toJSON(), token });
+    res.status(201).json({ token });
   } catch (error) {
-    console.error(error);
+    console.error("Error in signup:", error);
     next(error);
   }
 };
 
 const login = async (req, res, next) => {
   try {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
-    if (!user) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-    const token = generateToken(user);
-    res.json({ user, token });
+    const token = generateToken(req.user);
+    res.status(200).json({ token });
   } catch (error) {
     console.error(error);
     next(error);
@@ -103,14 +104,22 @@ const updateUser = async (req, res, next) => {
   try {
     const userData = req.body;
 
+    // If password is being updated, hash it
+    if (userData.password) {
+      userData.password = await hashPassword(userData.password);
+    }
+
     // If an image was uploaded, add its path to userData
     if (req.file) {
-      userData.imagePath = req.file.path;
+      userData.image = req.file.path;
     }
 
     const user = await User.findByIdAndUpdate(req.params.userId, userData, {
       new: true,
     });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
     res.json(user);
   } catch (error) {
     next(error);
