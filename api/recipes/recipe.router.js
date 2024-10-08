@@ -12,10 +12,10 @@ const {
 } = require("./recipe.controller");
 const passport = require("passport");
 
-recipeRouter.get("/recipes", getRecipes);
-recipeRouter.get("/recipes/:recipeId", getRecipeById);
+recipeRouter.get("/", getRecipes);
+recipeRouter.get("/:recipeId", getRecipeById);
 recipeRouter.post(
-  "/recipes",
+  "/",
   passport.authenticate("jwt", { session: false }),
   upload.single("image"),
   createRecipe

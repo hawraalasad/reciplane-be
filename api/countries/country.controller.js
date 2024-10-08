@@ -1,6 +1,5 @@
 const Country = require("../../models/Country");
 const Region = require("../../models/Region");
-
 const getCountries = async (req, res, next) => {
   try {
     const countries = await Country.find();
@@ -23,6 +22,9 @@ const getCountryById = async (req, res, next) => {
 const createCountry = async (req, res, next) => {
   try {
     const country = await Country.create(req.body);
+    const region = await Region.findById(req.body.region);
+    region.countries.push(country._id);
+    await region.save();
     res.status(201).json(country);
   } catch (error) {
     res.status(500).json({ error: error.message });

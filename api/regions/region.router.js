@@ -7,10 +7,10 @@ const {
   updateRegion,
   deleteRegion,
 } = require("./region.controller");
-regionRouter.get("/regions", getRegions);
-regionRouter.get("/regions/:regionId", getRegionById);
-regionRouter.post("/regions", createRegion);
-regionRouter.put("/regions/:regionId", updateRegion);
-regionRouter.delete("/regions/:regionId", deleteRegion);
+regionRouter.get("/", getRegions);
+regionRouter.get("/:regionId", getRegionById);
+regionRouter.post("", createRegion);
+regionRouter.put("/:regionId", updateRegion);
+regionRouter.delete("/:regionId", deleteRegion);
 
 module.exports = regionRouter;

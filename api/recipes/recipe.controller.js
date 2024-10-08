@@ -1,6 +1,11 @@
 const Recipe = require("../../models/Recipe");
 const Country = require("../../models/Country");
+<<<<<<< HEAD
 const Region = require("../../models/Region");
+=======
+const Ingredient = require("../../models/Ingredient");
+
+>>>>>>> origin/hawraa-fixes
 const getRecipes = async (req, res, next) => {
   try {
     const recipes = await Recipe.find().populate("country").populate("region");
@@ -31,7 +36,7 @@ const createRecipe = async (req, res, next) => {
     const recipeData = { ...req.body, user: req.user._id };
     const { country: recipeCountry, region: recipeRegion } = recipeData;
     if (req.file) {
-      recipeData.imageUrl = req.file.path;
+      recipeData.image = req.file.path;
     }
     const recipe = await Recipe.create(recipeData);
     const country = await Country.findByIdAndUpdate(recipeCountry, {

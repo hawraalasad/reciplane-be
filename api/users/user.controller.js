@@ -50,7 +50,7 @@ const getUserById = async (req, res, next) => {
   }
 };
 
-const signup = async (req, res, next) => {
+const register = async (req, res, next) => {
   try {
     const userData = req.body;
     console.log("Received user data:", userData);
@@ -62,7 +62,6 @@ const signup = async (req, res, next) => {
     // If an image was uploaded, add its path to userData
     if (req.file) {
       userData.image = req.file.path;
-      console.log("Image path added:", userData.image);
     }
 
     console.log("User data before creation:", userData);
@@ -78,6 +77,7 @@ const signup = async (req, res, next) => {
   } catch (error) {
     console.error("Error in signup:", error);
     next(error);
+    console.log(error);
   }
 };
 
@@ -138,7 +138,7 @@ const deleteUser = async (req, res, next) => {
 module.exports = {
   getUsers,
   getUserById,
-  signup,
+  register,
   updateUser,
   deleteUser,
   login,
