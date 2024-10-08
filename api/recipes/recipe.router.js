@@ -9,11 +9,17 @@ const {
   updateRecipe,
   deleteRecipe,
 } = require("./recipe.controller");
+const passport = require("passport");
 
-recipeRouter.get("/recipes", getRecipes);
-recipeRouter.get("/recipes/:recipeId", getRecipeById);
-recipeRouter.post("/recipes", upload.single("image"), createRecipe);
-recipeRouter.put("/recipes/:recipeId", upload.single("image"), updateRecipe);
-recipeRouter.delete("/recipes/:recipeId", deleteRecipe);
+recipeRouter.get("/", getRecipes);
+recipeRouter.get("/:recipeId", getRecipeById);
+recipeRouter.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  createRecipe
+);
+recipeRouter.put("/:recipeId", upload.single("image"), updateRecipe);
+recipeRouter.delete("/:recipeId", deleteRecipe);
 
 module.exports = recipeRouter;
