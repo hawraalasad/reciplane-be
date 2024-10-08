@@ -1,6 +1,5 @@
 const express = require("express");
 const upload = require("../../middlewares/multer");
-const { isAuthenticated } = require("../../middlewares/passport");
 
 const recipeRouter = express.Router();
 const {
