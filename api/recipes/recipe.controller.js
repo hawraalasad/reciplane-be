@@ -1,11 +1,8 @@
 const Recipe = require("../../models/Recipe");
 const Country = require("../../models/Country");
-<<<<<<< HEAD
 const Region = require("../../models/Region");
-=======
 const Ingredient = require("../../models/Ingredient");
 
->>>>>>> origin/hawraa-fixes
 const getRecipes = async (req, res, next) => {
   try {
     const recipes = await Recipe.find().populate("country").populate("region");
