@@ -5,7 +5,10 @@ const Ingredient = require("../../models/Ingredient");
 
 const getRecipes = async (req, res, next) => {
   try {
-    const recipes = await Recipe.find().populate("country").populate("region");
+    const recipes = await Recipe.find()
+      .populate("ingredients")
+      .populate("country")
+      .populate("region");
     res.json(recipes);
   } catch (error) {
     console.log(error);
@@ -30,18 +33,60 @@ const getRecipeById = async (req, res, next) => {
 
 const createRecipe = async (req, res, next) => {
   try {
-    const recipeData = { ...req.body, user: req.user._id };
-    const { country: recipeCountry, region: recipeRegion } = recipeData;
+    console.log(req.body);
+    const recipeData = {
+      user: req.user._id,
+      name: req.body.title,
+      description: req.body.instructions,
+      ingredients: req.body.ingredients,
+      continent: req.body.continent,
+      country: req.body.country,
+    };
+    const { country: recipeCountry, continent: recipeRegion } = recipeData;
     if (req.file) {
       recipeData.image = req.file.path;
     }
+
+    const foundRegion = await Region.findOne({ name: recipeRegion });
+    const foundCountry = await Country.findOne({ name: recipeCountry });
+
+    console.log("foundCountry", foundCountry, "country", recipeCountry);
+    if (!foundCountry) {
+      const newCountry = await Country.create({
+        name: recipeCountry,
+        region: foundRegion._id,
+      });
+      recipeData.country = newCountry._id;
+    } else {
+      recipeData.country = foundCountry._id;
+    }
+
+    recipeData.region = foundRegion._id;
+
+    let ingredients = recipeData.ingredients.split(",");
+
+    let ingridentIDs = [];
+
+    for (const ingredient of ingredients) {
+      const foundIngredient = await Ingredient.findOne({ name: ingredient });
+      if (!foundIngredient) {
+        const newIngredient = await Ingredient.create({ name: ingredient });
+        ingridentIDs.push(newIngredient._id);
+      } else {
+        ingridentIDs.push(foundIngredient._id);
+      }
+    }
+    recipeData.ingredients = ingridentIDs;
     const recipe = await Recipe.create(recipeData);
-    const country = await Country.findByIdAndUpdate(recipeCountry, {
+
+    const country = await Country.findByIdAndUpdate(recipeData.country, {
       $push: { recipes: recipe._id },
     });
-    const region = await Region.findByIdAndUpdate(recipeRegion, {
+
+    const region = await Region.findByIdAndUpdate(recipeData.region, {
       $push: { recipes: recipe._id },
     });
+
     res.status(201).json(recipe);
   } catch (error) {
     console.log(error);
