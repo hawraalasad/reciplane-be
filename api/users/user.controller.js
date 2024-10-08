@@ -47,7 +47,7 @@ const getUserById = async (req, res, next) => {
   }
 };
 
-const signup = async (req, res, next) => {
+const register = async (req, res, next) => {
   try {
     const userData = req.body;
 
@@ -64,7 +64,7 @@ const signup = async (req, res, next) => {
     // Generate a token for the new user
     const token = generateToken(user);
 
-    res.status(201).json({ user: user.toJSON(), token });
+    res.status(201).json({ token });
   } catch (error) {
     console.error(error);
     next(error);
@@ -130,7 +130,7 @@ const deleteUser = async (req, res, next) => {
 module.exports = {
   getUsers,
   getUserById,
-  signup,
+  register,
   updateUser,
   deleteUser,
   login,

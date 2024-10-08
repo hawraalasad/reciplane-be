@@ -9,12 +9,13 @@ const {
   login,
   signup,
   logout,
+  register,
 } = require("./user.controller");
 const UserRouter = express.Router();
 
 UserRouter.get("/users", getUsers);
 UserRouter.get("/users/:userId", getUserById);
-UserRouter.post("/signup", upload.single("image"), signup);
+UserRouter.post("/register", upload.single("image"), register);
 UserRouter.put("/users/:userId", upload.single("image"), updateUser);
 UserRouter.delete("/users/:userId", deleteUser);
 UserRouter.post(

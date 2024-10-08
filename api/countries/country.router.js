@@ -8,10 +8,10 @@ const {
   deleteCountry,
 } = require("./country.controller");
 
-countryRouter.get("/countries", getCountries);
-countryRouter.get("/countries/:countryId", getCountryById);
-countryRouter.post("/countries", createCountry);
-countryRouter.put("/countries/:countryId", updateCountry);
-countryRouter.delete("/countries/:countryId", deleteCountry);
+countryRouter.get("/", getCountries);
+countryRouter.get("/:countryId", getCountryById);
+countryRouter.post("/", createCountry);
+countryRouter.put("/:countryId", updateCountry);
+countryRouter.delete("/:countryId", deleteCountry);
 
 module.exports = countryRouter;
