@@ -21,13 +21,13 @@ recipeRouter.post(
   createRecipe
 );
 recipeRouter.put(
-  "/recipes/:recipeId",
+  "/:recipeId",
   passport.authenticate("jwt", { session: false }),
   upload.single("image"),
   updateRecipe
 );
 recipeRouter.delete(
-  "/recipes/:recipeId",
+  "/:recipeId",
   passport.authenticate("jwt", { session: false }),
   deleteRecipe
 );
