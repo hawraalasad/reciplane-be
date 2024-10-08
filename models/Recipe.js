@@ -19,6 +19,10 @@ const recipeSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
+    region: {
+      type: Schema.Types.ObjectId,
+      ref: "Region",
+    },
     country: {
       type: Schema.Types.ObjectId,
       ref: "Country",

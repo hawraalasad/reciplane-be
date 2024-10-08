@@ -8,6 +8,12 @@ const regionSchema = new Schema(
       trim: true,
       unique: true,
     },
+    recipes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Recipe",
+      },
+    ],
     countries: [
       {
         type: Schema.Types.ObjectId,

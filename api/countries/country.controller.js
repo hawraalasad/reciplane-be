@@ -10,7 +10,9 @@ const getCountries = async (req, res, next) => {
 };
 const getCountryById = async (req, res, next) => {
   try {
-    const country = await Country.findById(req.params.countryId);
+    const country = await Country.findById(req.params.countryId).populate(
+      "recipes"
+    );
     res.status(200).json(country);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -31,9 +33,13 @@ const createCountry = async (req, res, next) => {
 
 const updateCountry = async (req, res, next) => {
   try {
-    const country = await Country.update(req.body, {
-      where: { id: req.params.countryId },
-    });
+    const country = await Country.findByIdAndUpdate(
+      req.params.countryId,
+      req.body,
+      {
+        new: true,
+      }
+    );
     res.status(200).json(country);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -42,9 +48,7 @@ const updateCountry = async (req, res, next) => {
 
 const deleteCountry = async (req, res, next) => {
   try {
-    await Country.destroy({
-      where: { id: req.params.countryId },
-    });
+    await Country.findByIdAndDelete(req.params.countryId);
     res.status(204).json({ message: "Country deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });

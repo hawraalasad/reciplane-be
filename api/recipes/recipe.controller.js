@@ -1,10 +1,14 @@
 const Recipe = require("../../models/Recipe");
 const Country = require("../../models/Country");
+<<<<<<< HEAD
+const Region = require("../../models/Region");
+=======
 const Ingredient = require("../../models/Ingredient");
 
+>>>>>>> origin/hawraa-fixes
 const getRecipes = async (req, res, next) => {
   try {
-    const recipes = await Recipe.find();
+    const recipes = await Recipe.find().populate("country").populate("region");
     res.json(recipes);
   } catch (error) {
     console.log(error);
@@ -14,7 +18,9 @@ const getRecipes = async (req, res, next) => {
 
 const getRecipeById = async (req, res, next) => {
   try {
-    const recipe = await Recipe.findById(req.params.recipeId);
+    const recipe = await Recipe.findById(req.params.recipeId)
+      .populate("country")
+      .populate("region");
     if (!recipe) {
       return res.status(404).json({ error: "Recipe not found" });
     }
@@ -27,21 +33,19 @@ const getRecipeById = async (req, res, next) => {
 
 const createRecipe = async (req, res, next) => {
   try {
-    const recipeData = req.body;
+    const recipeData = { ...req.body, user: req.user._id };
+    const { country: recipeCountry, region: recipeRegion } = recipeData;
     if (req.file) {
       recipeData.image = req.file.path;
     }
-
-    recipeData.user = req.user._id;
-    const country = await Country.find({ name: recipeData.country });
-    recipeData.country = country._id;
-
-    const ingredients = await Ingredient.find({ name: recipeData.ingredients });
-
-    console.log("ingredients", ingredients);
-
-    // const recipe = await Recipe.create(recipeData);
-    res.status(201).json(recipeData);
+    const recipe = await Recipe.create(recipeData);
+    const country = await Country.findByIdAndUpdate(recipeCountry, {
+      $push: { recipes: recipe._id },
+    });
+    const region = await Region.findByIdAndUpdate(recipeRegion, {
+      $push: { recipes: recipe._id },
+    });
+    res.status(201).json(recipe);
   } catch (error) {
     console.log(error);
     next(error);
@@ -50,7 +54,8 @@ const createRecipe = async (req, res, next) => {
 
 const updateRecipe = async (req, res, next) => {
   try {
-    const recipeData = req.body;
+    const recipeData = { ...req.body, user: req.user._id };
+    const { country: recipeCountry, region: recipeRegion } = recipeData;
     if (req.file) {
       recipeData.imageUrl = req.file.path;
     }
@@ -59,6 +64,12 @@ const updateRecipe = async (req, res, next) => {
       recipeData,
       { new: true }
     );
+    const country = await Country.findByIdAndUpdate(recipeCountry, {
+      $push: { recipes: recipe._id },
+    });
+    const region = await Region.findByIdAndUpdate(recipeRegion, {
+      $push: { recipes: recipe._id },
+    });
     if (!recipe) {
       return res.status(404).json({ error: "Recipe not found" });
     }
