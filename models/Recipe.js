@@ -33,6 +33,12 @@ const recipeSchema = new Schema(
         ref: "Ingredient",
       },
     ],
+    likedBy: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     timestamps: true,

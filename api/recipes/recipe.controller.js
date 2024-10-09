@@ -155,6 +155,43 @@ const deleteRecipe = async (req, res, next) => {
   }
 };
 
+const toggleLike = async (req, res, next) => {
+  try {
+    const { recipeId } = req.params;
+    const userId = req.user._id;
+
+    const user = await UserSchema.findById(userId);
+    const recipe = await Recipe.findById(recipeId);
+
+    if (!user || !recipe) {
+      return res.status(404).json({ message: "User or Recipe not found" });
+    }
+
+    const isLiked = user.likedRecipes.includes(recipeId);
+
+    if (isLiked) {
+      // Unlike: Remove recipeId from user's likes and userId from recipe's likes
+      await UserSchema.findByIdAndUpdate(userId, {
+        $pull: { likedRecipes: recipeId },
+      });
+      await Recipe.findByIdAndUpdate(recipeId, { $pull: { likedBy: userId } });
+    } else {
+      // Like: Add recipeId to user's likes and userId to recipe's likes
+      await UserSchema.findByIdAndUpdate(userId, {
+        $addToSet: { likedRecipes: recipeId },
+      });
+      await Recipe.findByIdAndUpdate(recipeId, {
+        $addToSet: { likedBy: userId },
+      });
+    }
+
+    res.status(200).json({ message: "Liked recipe" });
+  } catch (error) {
+    console.error("Error toggling like:", error);
+    next(error);
+  }
+};
+
 module.exports = {
   getRecipes,
   getRecipeById,
@@ -162,4 +199,5 @@ module.exports = {
   updateRecipe,
   deleteRecipe,
   getRecipesByCountry,
+  toggleLike,
 };
