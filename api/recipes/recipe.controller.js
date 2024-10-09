@@ -20,6 +20,8 @@ const getRecipeById = async (req, res, next) => {
   try {
     const recipe = await Recipe.findById(req.params.recipeId)
       .populate("country")
+      .populate("user")
+      .populate("ingredients")
       .populate("region");
     if (!recipe) {
       return res.status(404).json({ error: "Recipe not found" });
