@@ -89,6 +89,10 @@ const createRecipe = async (req, res, next) => {
       $push: { recipes: recipe._id },
     });
 
+    const updateUser = await User.findByIdAndUpdate(recipeData.user, {
+      $push: { recipes: recipe._id },
+    });
+
     res.status(201).json(recipe);
   } catch (error) {
     console.log(error);
