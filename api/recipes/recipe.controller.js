@@ -2,6 +2,7 @@ const Recipe = require("../../models/Recipe");
 const Country = require("../../models/Country");
 const Region = require("../../models/Region");
 const Ingredient = require("../../models/Ingredient");
+const UserSchema = require("../../models/UserSchema");
 
 const getRecipes = async (req, res, next) => {
   try {
@@ -35,7 +36,6 @@ const getRecipeById = async (req, res, next) => {
 
 const createRecipe = async (req, res, next) => {
   try {
-    console.log(req.body);
     const recipeData = {
       user: req.user._id,
       name: req.body.title,
@@ -79,6 +79,8 @@ const createRecipe = async (req, res, next) => {
       }
     }
     recipeData.ingredients = ingridentIDs;
+
+    console.log("recipeData", recipeData);
     const recipe = await Recipe.create(recipeData);
 
     const country = await Country.findByIdAndUpdate(recipeData.country, {
@@ -89,7 +91,7 @@ const createRecipe = async (req, res, next) => {
       $push: { recipes: recipe._id },
     });
 
-    const updateUser = await User.findByIdAndUpdate(recipeData.user, {
+    const updateUser = await UserSchema.findByIdAndUpdate(recipeData.user, {
       $push: { recipes: recipe._id },
     });
 
