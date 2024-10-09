@@ -8,9 +8,9 @@ const {
   deleteIngredient,
 } = require("./ingredient.contoller");
 
-ingredientRouter.get("/ingredients", getIngredients);
-ingredientRouter.post("/ingredients", createIngredient);
-ingredientRouter.put("/ingredients/:ingredientId", updateIngredient);
-ingredientRouter.delete("/ingredients/:ingredientId", deleteIngredient);
+ingredientRouter.get("/", getIngredients);
+ingredientRouter.post("/", createIngredient);
+ingredientRouter.put("/:ingredientId", updateIngredient);
+ingredientRouter.delete("/:ingredientId", deleteIngredient);
 
 module.exports = ingredientRouter;
