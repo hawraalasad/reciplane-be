@@ -8,7 +8,7 @@ const {
   deleteIngredient,
 } = require("./ingredient.contoller");
 
-ingredientRouter.get("/ingredients", getIngredients);
+ingredientRouter.get("/", getIngredients);
 ingredientRouter.post("/ingredients", createIngredient);
 ingredientRouter.put("/ingredients/:ingredientId", updateIngredient);
 ingredientRouter.delete("/ingredients/:ingredientId", deleteIngredient);

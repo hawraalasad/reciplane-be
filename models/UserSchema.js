@@ -28,6 +28,12 @@ const userSchema = new Schema(
         ref: "Recipe",
       },
     ],
+    likedRecipes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Recipe",
+      },
+    ],
   },
   {
     timestamps: true, //when the user is created and updated
