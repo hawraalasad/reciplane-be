@@ -52,7 +52,7 @@ const getUserById = async (req, res, next) => {
 
 const getMyProfile = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user._id).populate("recipes");
     res.json(user);
   } catch (error) {
     next(error);
