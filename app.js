@@ -9,7 +9,7 @@ const errorHandler = require("./middlewares/errorHandler");
 const UserRouter = require("./api/users/user.router"); // Add this line to import UserRouter
 const passport = require("passport");
 const { JwtStrategy, localStrategy } = require("./middlewares/passport");
-
+const path = require("path");
 const RecipeRouter = require("./api/recipes/recipe.router");
 const IngredientRouter = require("./api/ingredients/ingredient.router");
 const CountryRouter = require("./api/countries/country.router");
@@ -27,6 +27,7 @@ passport.use("jwt", JwtStrategy); // Initialize Passport with the JWT strategy
 passport.use("local", localStrategy); // Initialize Passport with the local strategy
 
 // Add here to use routers
+app.use("/media", express.static(path.join(__dirname, "media")));
 app.use("/api/auth", UserRouter);
 app.use("/api/regions", RegionRouter);
 app.use("/api/recipes", RecipeRouter);
