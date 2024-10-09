@@ -36,9 +36,10 @@ const getRecipeById = async (req, res, next) => {
 
 const getRecipesByCountry = async (req, res, next) => {
   try {
-    const country = await Country.find({ name: req.params.country });
-    const recipes = await Recipe.find({ country: country._id });
-    res.json(recipes);
+    const country = await Country.findOne({
+      name: req.params.country,
+    }).populate("recipes");
+    res.status(200).json(country.recipes);
   } catch (error) {
     console.log(error);
     next(error);
