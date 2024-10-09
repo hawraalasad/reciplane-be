@@ -10,7 +10,22 @@ const getIngredients = async (req, res, next) => {
 
 const createIngredient = async (req, res, next) => {
   try {
-    const ingredient = await Ingredient.create(req.body);
+    const { name, category, emoji } = req.body;
+
+    // Check if the ingredient already exists
+    let ingredient = await Ingredient.findOne({ name: name.toLowerCase() });
+
+    if (ingredient) {
+      return res.status(400).json({ message: "Ingredient already exists" });
+    }
+
+    // Create new ingredient
+    ingredient = await Ingredient.create({
+      name: name.toLowerCase(),
+      category,
+      emoji,
+    });
+
     res.status(201).json(ingredient);
   } catch (error) {
     next(error);
