@@ -33,6 +33,17 @@ const getRecipeById = async (req, res, next) => {
   }
 };
 
+const getRecipesByCountry = async (req, res, next) => {
+  try {
+    const country = await Country.find({ name: req.params.country });
+    const recipes = await Recipe.find({ country: country._id });
+    res.json(recipes);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
 const createRecipe = async (req, res, next) => {
   try {
     console.log(req.body);
@@ -147,4 +158,5 @@ module.exports = {
   createRecipe,
   updateRecipe,
   deleteRecipe,
+  getRecipesByCountry,
 };
