@@ -126,12 +126,12 @@ const updateRecipe = async (req, res, next) => {
       recipeData,
       { new: true }
     );
-    const country = await Country.findByIdAndUpdate(recipeCountry, {
-      $push: { recipes: recipe._id },
-    });
-    const region = await Region.findByIdAndUpdate(recipeRegion, {
-      $push: { recipes: recipe._id },
-    });
+    // const country = await Country.findByIdAndUpdate(recipeCountry, {
+    //   $push: { recipes: recipe._id },
+    // });
+    // const region = await Region.findByIdAndUpdate(recipeRegion, {
+    //   $push: { recipes: recipe._id },
+    // });
     if (!recipe) {
       return res.status(404).json({ error: "Recipe not found" });
     }
