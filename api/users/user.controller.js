@@ -50,6 +50,15 @@ const getUserById = async (req, res, next) => {
   }
 };
 
+const getMyProfile = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id);
+    res.json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const register = async (req, res, next) => {
   try {
     const userData = req.body;
@@ -143,4 +152,5 @@ module.exports = {
   deleteUser,
   login,
   logout,
+  getMyProfile,
 };
